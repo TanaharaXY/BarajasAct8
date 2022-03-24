@@ -1,73 +1,91 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package deck;
+
+import java.io.IOException;
 import java.util.*;
+import java.lang.*;
 
 public class deck {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        Scanner sn = new Scanner(System.in);
+        int op = 0;
+        boolean salir = false;
+
         card card = new card();
-        int palos = card.palo.length;
-        int valores = card.valor.length;
-        int colores = card.color.length;
-        int N = palos * valores * colores; 
+        int PALOS = card.palo.length;
+        int VALORES = card.valor.length;
+        int COLORES = card.color.length;
+        int N = PALOS * VALORES * COLORES;
 
         ArrayList<String> deck = new ArrayList<String>();
-        for (int i = 0; i < valores; i++) {
-            for (int j = 0; j < palos; j++) {
-                deck.add(card.palo[j]+ ", Rojo , " + card.valor[i]);
-                deck.add(card.palo[j]+ ", Negro , " + card.valor[i]);
+        for (int i = 0; i < VALORES; i++) {
+            for (int j = 0; j < PALOS; j++) {
+                deck.add(card.palo[j] + ", Rojo , " + card.valor[i]);
+                deck.add(card.palo[j] + ", Negro , " + card.valor[i]);
             }
         }
+        while (!salir) {
+            System.out.println("POKER");
+            System.out.println("Selecciona una opcion: \n1. Mezclar deck. \n2. Sacar una carta. \n3. Carta al azar. \n4. Generar una mano de 5 cartas. \n0. Salir.");
+            op = sn.nextInt();
+            try {
+                switch (op) {
+                    case 1:
+                        System.out.println("Se mezclo el deck");
+                        break;
 
-        Iterator<String> nombreIterator = deck.iterator();
-        while(nombreIterator.hasNext()){
-            String elemento = nombreIterator.next();
-            System.out.print(elemento+" / ");
+                    case 2:
+                        try {
+                            System.out.println(deck.get(0));
+                            deck.remove(0);
+                            System.out.println("Quedan " + deck.size() + " cartas \n");
+                        } catch (IndexOutOfBoundsException e) {
+                            System.out.println("No hay mas cartas.");
+                            System.exit(0);
+                        }
+                        break;
+
+                    case 3:
+                        try {
+                            Random aleatorio = new Random();
+                            System.out.println(deck.get(aleatorio.nextInt(deck.size())));
+                            deck.remove(aleatorio.nextInt(deck.size()));
+                            System.out.println("Quedan " + deck.size() + " cartas\n");
+                        } catch (IndexOutOfBoundsException e) {
+                            System.out.println("No hay mas cartas");
+                            System.exit(0);
+                        } catch (IllegalArgumentException ex) {
+                            System.out.println("No hay mas cartas!");
+                            System.exit(0);
+                        }
+                        break;
+
+                    case 4:
+                        try {
+                            for (int i = 0; i < 5; i++) {
+                                System.out.println(deck.get(i));
+                            }
+                            for (int i = 0; i < 5; i++) {
+                                deck.remove(i);
+                            }
+                            System.out.println("Quedan " + deck.size() + " cartas");
+                        } catch (IndexOutOfBoundsException e) {
+                            System.out.println("No hay mas cartas");
+                            System.exit(0);
+                        }
+                        break;
+
+                    case 0:
+                        salir = true;
+                        break;
+
+                    default:
+                        System.out.println("Opcion no valida");
+                        break;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Opcion no valida");
+            }
         }
-        shuflle(deck);
-        head(deck);
-        pick(deck);
-        hand(deck);
     }
-
-    public static void shuflle(ArrayList deck){
-        ArrayList<String> values = deck;
-        Collections.shuffle(values);
-        System.out.println("\n Se mezcló el Deck.");
-        Iterator<String> nombreIterator2 = deck.iterator();
-        while(nombreIterator2.hasNext()){
-            String elemento = nombreIterator2.next();
-            System.out.print(elemento+" / ");
-        }
-    }
-
-    public static void head(ArrayList deck){
-        System.out.println(deck.get(0));
-        deck.remove(0);
-        System.out.println("Quedan " + deck.size() + " cartas \n");
-    }
-
-    public static void pick(ArrayList  deck){
-        Random aleatorio = new Random();
-        System.out.println(deck.get(aleatorio.nextInt(deck.size())));
-        deck.remove(aleatorio.nextInt(deck.size()));
-        System.out.println("Quedan " + deck.size() + " cartas \n");
-    }
-
-    public static void hand(ArrayList deck){
-        for(int i=0; i<=4; i++){
-            System.out.println(deck.get(i));
-        }
-        for(int i=0; i<=4; i++){
-            deck.remove(i);
-        }
-        System.out.println("Quedan " + deck.size()+ " cartas");
-    }
-    
 }
