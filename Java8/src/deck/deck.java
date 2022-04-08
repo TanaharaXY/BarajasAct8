@@ -1,91 +1,116 @@
 package deck;
 
-import java.io.IOException;
-import java.util.*;
-import java.lang.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
+import javax.swing.JOptionPane;
 
 public class deck {
-
-    public static void main(String[] args) throws IOException {
-        Scanner sn = new Scanner(System.in);
-        int op = 0;
-        boolean salir = false;
-
-        card card = new card();
-        int PALOS = card.palo.length;
-        int VALORES = card.valor.length;
-        int COLORES = card.color.length;
-        int N = PALOS * VALORES * COLORES;
-
-        ArrayList<String> deck = new ArrayList<String>();
-        for (int i = 0; i < VALORES; i++) {
-            for (int j = 0; j < PALOS; j++) {
-                deck.add(card.palo[j] + ", Rojo , " + card.valor[i]);
-                deck.add(card.palo[j] + ", Negro , " + card.valor[i]);
-            }
+ 
+    
+    private final String[] Palo = {"Corazón", "Diamante", "Treból", "Pica"};
+    private final String[] Color = {"Rojo", "Negro"};
+    private final String[] Valor = {"A", "2", "3", "4", "5", "6", "7", "8","9", "10", "J", "Q", "K"};
+        
+        
+    private ArrayList<card> mazo;
+        
+    public deck(){
+            
+        mazo = new ArrayList<card>();
+            
+       
+        for(int i = 0; i < 2; i++){
+            
+            for(int j = 0; j < Valor.length; j++){
+                
+                mazo.add(new card(Palo[i], Color[0],Valor[j]));  
+            } 
         }
-        while (!salir) {
-            System.out.println("POKER");
-            System.out.println("Selecciona una opcion: \n1. Mezclar deck. \n2. Sacar una carta. \n3. Carta al azar. \n4. Generar una mano de 5 cartas. \n0. Salir.");
-            op = sn.nextInt();
-            try {
-                switch (op) {
-                    case 1:
-                        System.out.println("Se mezclo el deck");
-                        break;
-
-                    case 2:
-                        try {
-                            System.out.println(deck.get(0));
-                            deck.remove(0);
-                            System.out.println("Quedan " + deck.size() + " cartas \n");
-                        } catch (IndexOutOfBoundsException e) {
-                            System.out.println("No hay mas cartas.");
-                            System.exit(0);
-                        }
-                        break;
-
-                    case 3:
-                        try {
-                            Random aleatorio = new Random();
-                            System.out.println(deck.get(aleatorio.nextInt(deck.size())));
-                            deck.remove(aleatorio.nextInt(deck.size()));
-                            System.out.println("Quedan " + deck.size() + " cartas\n");
-                        } catch (IndexOutOfBoundsException e) {
-                            System.out.println("No hay mas cartas");
-                            System.exit(0);
-                        } catch (IllegalArgumentException ex) {
-                            System.out.println("No hay mas cartas!");
-                            System.exit(0);
-                        }
-                        break;
-
-                    case 4:
-                        try {
-                            for (int i = 0; i < 5; i++) {
-                                System.out.println(deck.get(i));
-                            }
-                            for (int i = 0; i < 5; i++) {
-                                deck.remove(i);
-                            }
-                            System.out.println("Quedan " + deck.size() + " cartas");
-                        } catch (IndexOutOfBoundsException e) {
-                            System.out.println("No hay mas cartas");
-                            System.exit(0);
-                        }
-                        break;
-
-                    case 0:
-                        salir = true;
-                        break;
-
-                    default:
-                        System.out.println("Opcion no valida");
-                        break;
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Opcion no valida");
-            }
-        }
+        
+        for(int i = 2; i < 4; i++){
+            
+            for(int j = 0; j < Valor.length; j++){
+                
+                mazo.add(new card(Palo[i], Color[1], Valor[j]));  
+            } 
+        }   
     }
+    
+    //Obtenemos el tamaño del deck
+    public int getSize(){
+   
+        return mazo.size();
+    }
+    
+   
+   //Nos muestra el Deck 
+    public ArrayList<card> getDeck(){
+        
+        return mazo;
+    }
+    
+    public void shuflle() throws Exception{
+        
+        try{
+            Collections.shuffle(mazo);
+            System.out.println("Mezclamos el deck.");
+            for (Object objeto : mazo)
+            {
+                System.out.print(mazo + " /n ");
+            }
+        }catch(Exception e){
+            
+            JOptionPane.showMessageDialog(null, "No quedan suficientes cartas.");   
+        }
+        }
+    
+
+
+        public void head() throws Exception{
+            
+            try{
+            System.out.println(mazo.get(0));
+            mazo.remove(0);
+            System.out.println("Quedan " + mazo.size() + " cartas");
+            }catch(Exception e){
+            
+            JOptionPane.showMessageDialog(null, "No quedan cartas en el Deck.");
+            
+        }
+        }
+
+
+        public void pick() throws Exception{
+            
+            try{
+            Random random = new Random();
+            System.out.println(mazo.get(random.nextInt(mazo.size())));
+            mazo.remove(random.nextInt(mazo.size()));
+            System.out.println("Quedan " + mazo.size() + " cartas");
+            }catch(Exception e){
+            
+            JOptionPane.showMessageDialog(null, "No quedan suficientes cartas.");
+            
+        }  
+        }
+
+        public void hand() throws Exception{
+            
+            try {
+            for(int i=0; i<=4; i++){
+                System.out.println(mazo.get(i));
+            }
+            for(int i=0; i<=4; i++){
+                mazo.remove(i);
+            }
+            System.out.println("Quedan " + mazo.size()+ " cartas");
+            } catch(Exception e){
+            
+            JOptionPane.showMessageDialog(null, "No quedan suficientes cartas.");
+            
+        }  
+        }
+
+    
 }
